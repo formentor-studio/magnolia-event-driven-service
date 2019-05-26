@@ -1,0 +1,13 @@
+
+class: info.magnolia.rest.delivery.jcr.v2.JcrDeliveryEndpointDefinition
+workspace: tours
+limit: 25
+depth: 2
+includeSystemProperties: false
+nodeTypes:
+  - mgnl:folder
+  - mgnl:content
+childNodeTypes:
+  - mgnl:content
+
+#references

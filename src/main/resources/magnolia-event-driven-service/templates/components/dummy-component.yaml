@@ -1,0 +1,2 @@
+templateScript: /magnolia-event-driven-service/templates/components/dummy-component.ftl
+renderType: freemarker

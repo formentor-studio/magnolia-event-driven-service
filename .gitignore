@@ -1,0 +1,25 @@
+target
+HELP.md
+!.mvn/wrapper/maven-wrapper.jar
+*.DS_Store
+overlays
+
+### IntelliJ IDEA ###
+.idea
+*.iml
+*.ipr
+*.iws
+*.log
+
+### Eclipse ###
+.apt_generated
+.factorypath
+.springBeans
+.sts4-cache
+.project
+.classpath
+.settings
+.checkstyle
+
+### VS Code ###
+.vscode/

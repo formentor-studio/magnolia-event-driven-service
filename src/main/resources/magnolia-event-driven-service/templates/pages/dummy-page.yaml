@@ -1,0 +1,10 @@
+templateScript: /magnolia-event-driven-service/templates/pages/dummy-page.ftl
+renderType: freemarker
+visible: true
+dialog: magnolia-event-driven-service:pages/dummy-page-properties
+areas:
+  main:
+    renderType: freemarker
+    availableComponents:
+      dummy-component:
+        id: magnolia-event-driven-service:components/dummy-component

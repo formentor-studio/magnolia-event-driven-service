@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE module SYSTEM "module.dtd" >
+<module>
+  <name>magnolia-event-driven-service</name>
+  <displayName>${project.name}</displayName>
+  <description>${project.description}</description>
+  <class>com.formentor.magnolia.async.AsyncService</class>
+  <versionHandler>com.formentor.magnolia.async.setup.AsyncServiceVersionHandler</versionHandler>
+  <version>${project.version}</version>
+
+  <!-- For more information on module descriptor configuration options -->
+  <!-- https://documentation.magnolia-cms.com/display/DOCS/XML-based+module+descriptor -->
+
+  <components>
+    <id>main</id>
+    <component>
+      <type>com.formentor.magnolia.async.service.QueueProducerService</type>
+      <implementation>com.formentor.magnolia.async.service.impl.KafkaQueueProducerServiceImpl</implementation>
+      <scope>singleton</scope>
+    </component>
+  </components>
+
+  <dependencies>
+    <dependency>
+      <name>core</name>
+      <version>*</version>
+    </dependency>
+    <dependency>
+      <name>rest-content-delivery</name>
+      <version>*</version>
+    </dependency>
+    <!--  Add other dependencies here, e.g the mte (magnolia templating essentials).
+    <dependency>
+      <name>mte</name>
+      <version>0.7/*</version>
+    </dependency>
+    -->
+  </dependencies>
+</module>
