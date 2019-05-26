@@ -37,6 +37,14 @@ command.setPath('/magnolia-travels/Vietnam--Tradition-and-Today')
 command.execute(ctx)
 ~~~~
 
+Ver resultado:
+~~~~
+# Consulta de topics. Aparece un topic igual al endpoint 
+$ bin/kafka-topics.sh --list --zookeeper localhost:2181
+
+# Consulta de mensajes en topic delivery_tours_v1
+$ bin/kafka-console-consumer.sh --bootstrap-server localhost:9092 --topic delivery_tours_v1 --from-beginning
+~~~~
 **NOTA**
 > El nombre del topic de publicación corresponde al path del endpoint reemplazando "/" por "_"
 
