@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<sv:node xmlns:sv="http://www.jcp.org/jcr/sv/1.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" sv:name="async-delivery-command">
+<sv:node xmlns:sv="http://www.jcp.org/jcr/sv/1.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" sv:name="event-driven-command">
   <sv:property sv:name="jcr:primaryType" sv:type="Name">
     <sv:value>mgnl:content</sv:value>
   </sv:property>
@@ -13,7 +13,7 @@
     <sv:value>superuser</sv:value>
   </sv:property>
   <sv:property sv:name="mgnl:lastModified" sv:type="Date">
-    <sv:value>2019-05-10T13:51:47.725+02:00</sv:value>
+    <sv:value>2019-08-26T12:08:35.136+02:00</sv:value>
   </sv:property>
   <sv:property sv:name="mgnl:lastModifiedBy" sv:type="String">
     <sv:value>superuser</sv:value>
@@ -23,10 +23,13 @@
   </sv:property>
   <sv:property sv:name="text" sv:type="String">
     <sv:value>cm = info.magnolia.commands.CommandsManager.getInstance()
-command = cm.getCommand('asyncdelivery', 'deliver')
+command = cm.getCommand('eventdriven', 'enqueue')
 command.setRepository('tours')
 command.setPath('/magnolia-travels/Vietnam--Tradition-and-Today')
-command.execute(ctx)</sv:value>
+command.execute(ctx)
+
+
+</sv:value>
   </sv:property>
 </sv:node>
 

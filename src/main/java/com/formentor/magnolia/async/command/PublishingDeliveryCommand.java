@@ -1,8 +1,6 @@
 package com.formentor.magnolia.async.command;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.formentor.magnolia.async.AsyncService;
 import com.formentor.magnolia.async.service.QueueProducerService;
 import info.magnolia.cms.core.version.VersionManager;
 import info.magnolia.config.registry.DefinitionProvider;
@@ -41,8 +39,9 @@ public class PublishingDeliveryCommand extends PublicationCommand {
     public boolean execute(Context context) throws Exception {
         Node node = getJCRNode(context);
 
-        // Register all currently registered endpoints
+        // For all registered endpoints check that the repository and node type is listed
         for (DefinitionProvider<EndpointDefinition> provider : endpointRegistry.getAllProviders()) {
+            // Only endpoints registered in REST Content Delivery
             if (provider.get() instanceof JcrDeliveryEndpointDefinition) {
                 try {
                     JcrDeliveryEndpointDefinition deliveryDefinition = (JcrDeliveryEndpointDefinition) provider.get();
@@ -51,7 +50,7 @@ public class PublishingDeliveryCommand extends PublicationCommand {
                     boolean nodeTypeMatched = nodeTypesPredicate.evaluateTyped(node);
 
                     if (deliveryDefinition.getWorkspace().equals(getRepository()) && nodeTypeMatched) {
-                        log.warn("Delivery content endpoint {}", provider.getMetadata().getReferenceId());
+                        // Build topic name from the endpoint, build payload from JCR Node and enqueue the event
                         String endpointReferenceId = provider.getMetadata().getReferenceId();
                         String topic = buildTopicName(endpointReferenceId);
                         String payload = buildPayload(node, deliveryDefinition);
@@ -70,7 +69,7 @@ public class PublishingDeliveryCommand extends PublicationCommand {
     }
 
     /**
-     * Builds message payload based on Node
+     * Builds message payload based on a JCR Node
      *
      * @param node
      * @param deliveryDefinition

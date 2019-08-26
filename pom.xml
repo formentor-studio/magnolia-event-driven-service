@@ -10,10 +10,11 @@
   <description>Please uncomment and fill in ...</description>
   -->
   <properties>
-    <magnoliaBundleVersion>6.0</magnoliaBundleVersion>
+    <magnoliaBundleVersion>6.1</magnoliaBundleVersion>
     <javaVersion>1.8</javaVersion>
     <kafka.version>2.1.0</kafka.version>
     <magnolia-rest.version>2.1.1</magnolia-rest.version>
+    <magnolia-groovy.version>2.8.1</magnolia-groovy.version>
   </properties>
 
   <dependencyManagement>
@@ -49,6 +50,13 @@
       <groupId>info.magnolia.rest</groupId>
       <artifactId>magnolia-rest-services</artifactId>
       <version>${magnolia-rest.version}</version>
+    </dependency>
+
+    <!-- Magnolia Groovy module -->
+    <dependency>
+      <groupId>info.magnolia.groovy</groupId>
+      <artifactId>magnolia-groovy</artifactId>
+      <version>${magnolia-groovy.version}</version>
     </dependency>
 
     <!-- Kafka message broker -->
