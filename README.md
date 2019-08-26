@@ -1,57 +1,90 @@
 # Magnolia event-driven
 
-Implementación del patrón de diseño event-driven para exponer contenidos a servicios de forma asíncrona 
+Usage of event-driven pattern to decouple Magnolia CMS from its consumers. 
 
-## Features
-Publica/produce los contenidos de magnolia en colas kafka en función de la configuración de endpoints del módulo REST Content Delivery
-
-Integración con Apache Kafka. Permite consumidores simultáneos.  
-  
-
-**Ejemplo**
->Los nodos de un workspace + nodetype sólo serán publicados si existe un endpoint para dicho workspace + nodetype configurado en REST Content Delivery
+This repository is related with [Implementing Event-driven architecture in Magnolia CMS using Kafka](https://medium.com/@joaquin.alfaro/implementing-event-driven-in-magnolia-cms-using-kafka-e9722eb43e7a)
+### Features
+The publication of contents generates events that are enqueued in Kafka.
+This feature is combined with *REST Content Deliverty API* because it enqueues the same resources exposed by the endpoints configured in *REST Content Deliverty API*
 
 
-## Usage
-1. Instalar Zookeeper y Apache Kafka. https://kafka.apache.org/quickstart  
+For example if Magnolia stores *web pages*, *factsheet of shoes* and *description of stores* and that just *shoes* and *stores* are exposed in *REST content delivery*, then publication of *web pages* won't be sent to Kafka because *web pages* does not have an endpoint configured in REST content Delivery.
 
-2. Configurar host de Apache Kafka en magnolia-event-driven-service/config@mq_server. El valor para instalación estándar de Kafka sería localhost:9092 
 
-#### Comandos  
+### Installation
+1. Install Zookeeper and Apache Kafka. https://kafka.apache.org/quickstart  
 
-##### asyncdelivery-deliver  
-Objetivo: publicación de nodo en Kafka (la publicación depende de los endpoint configurados eb REST content delivery). El comando puede ser incluido en el command group de publicación.
-  
+2. Configure the host of Apache Kafka in *config:magnolia-event-driven-service/config@mq_server*. For example *localhost:9092*
 
-Parámetros:  
-> repository: nombre del workspace del nodo a publicar  
+3. Build and install magnolia-event-driven-service module.
 
-> path: path del nodo a publicar  
+````
+$ cd magnolia-event-driven-service
+$ mvn install
+````
 
-Ejemplo:  
+4.Add dependency with magnolia-event-driven-service in the bundle of Magnolia author.
+
+```
+<dependency>
+    <groupId>com.formentor</groupId>
+    <artifactId>magnolia-event-driven-service</artifactId>
+    <version>${magnolia-event-driven.version}</version>
+</dependency>
+```
+5.Use the command *eventdriven-publishAndEnqueue* for publication  
+
+### Commands  
+
+##### eventdriven-enqueue
+Enqueue in Kafka the contents of a JCR Node of Magnolia
+
+Parameters:  
+> **repository**: name of the workspace of the Node  
+
+> **path**: location of the Node
+
+Example:  
 ~~~~
 cm = info.magnolia.commands.CommandsManager.getInstance()
-command = cm.getCommand('asyncdelivery', 'deliver')
+command = cm.getCommand('eventdriven', 'enqueue')
 command.setRepository('tours')
 command.setPath('/magnolia-travels/Vietnam--Tradition-and-Today')
 command.execute(ctx)
 ~~~~
 
-Ver resultado:
-~~~~
-# Consulta de topics. Aparece un topic igual al endpoint 
-$ bin/kafka-topics.sh --list --zookeeper localhost:2181
+##### eventdriven-publishAndEnqueue  
+It is a chained command composed by *default-publish* and *eventdriven-enqueue* commands. It is the command to be used for the publication action.
 
-# Consulta de mensajes en topic delivery_tours_v1
-$ bin/kafka-console-consumer.sh --bootstrap-server localhost:9092 --topic delivery_tours_v1 --from-beginning
-~~~~
-**NOTA**
-> El nombre del topic de publicación corresponde al path del endpoint reemplazando "/" por "_"
+```
+eventdriven:
+  publishAndEnqueue:
+    publish:
+      class: info.magnolia.commands.DelegateCommand
+      commandName: default-publish
+    enqueue:
+      class: com.formentor.magnolia.async.command.PublishingDeliveryCommand
+      enabled: 'true'
+```
 
-## Contribute to the Magnolia component ecosystem
-It's easy to create components for Magnolia and share them on github and npm. I invite you to do so and join the community. Let's stop wasting time by developing the same thing again and again, rather let's help each other out by sharing our work and create a rich library of components.
+### Testing
+1. Publish contents of a Node whose node-type and workspace is configured as endpoint in REST Content Delivery  
+2. Query the Node from REST Content Deliver API
+```
+$ curl -X GET \
+  http://localhost:8080/magnolia-formentor-modules/.rest/tours/endpoint/magnolia-travels/Vietnam--Tradition-and-Today \
+  -H 'Authorization: Basic c3VwZXJ1c2VyOnN1cGVydXNlcg=='
+```  
+3.Get the last message of the topic with the same name as the endpoint
+```
+$ bin/kafka-console-consumer.sh --bootstrap-server localhost:9092 --topic tours_endpoint --from-beginning
+```
+4.The payload of the message will be the same as the reponse of the REST API.
+Please take note that the name of the topic replaces "/" of the endpoint with "_"
+ 
+**NOTE**
+> The name of the topic is the same as the REST Content Delivery
 
-Just add `magnolia-light-module` as a keyword to npm's package.json to make them easy to find and use on npm.
 
 ## License
 
@@ -59,6 +92,6 @@ MIT
 
 ## Contributors
 
-Formentor Studio, http://formentor-studio.com/
-
 Joaquín Alfaro, @Joaquin_Alfaro
+
+Formentor Studio, http://formentor-studio.com/
