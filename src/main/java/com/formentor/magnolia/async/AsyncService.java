@@ -14,6 +14,7 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 public class AsyncService implements info.magnolia.module.ModuleLifecycle {
     private String mq_server;
+    private String mq_namespace;
     private String mq_queue;
     private boolean enabled;
 

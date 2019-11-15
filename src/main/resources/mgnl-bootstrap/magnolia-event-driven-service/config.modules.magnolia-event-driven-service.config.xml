@@ -3,8 +3,14 @@
   <sv:property sv:name="jcr:primaryType" sv:type="Name">
     <sv:value>mgnl:content</sv:value>
   </sv:property>
+  <sv:property sv:name="enabled" sv:type="String">
+    <sv:value>false</sv:value>
+  </sv:property>
+  <sv:property sv:name="mq_namespace" sv:type="String">
+    <sv:value>magnolia</sv:value>
+  </sv:property>
   <sv:property sv:name="mq_queue" sv:type="String">
-    <sv:value>mgnl-tours</sv:value>
+    <sv:value />
   </sv:property>
   <sv:property sv:name="mq_server" sv:type="String">
     <sv:value>localhost:9092</sv:value>
