@@ -20,6 +20,7 @@ import lombok.extern.slf4j.Slf4j;
 import javax.inject.Inject;
 import javax.jcr.Node;
 import java.io.File;
+import java.util.Collections;
 import java.util.Map;
 
 @Slf4j
@@ -95,7 +96,7 @@ public class PublishingDeliveryCommand extends PublicationCommand {
         Node wrappedNode = decorators.wrapNode(node);
         ObjectMapper objectMapper = new ObjectMapper();
         try {
-            final RepositoryNode response = marshaller.marshallNode(wrappedNode);
+            final RepositoryNode response = marshaller.marshallNode(node, workspaceParams.getDepth(), Collections.emptyList(), true);
             payload = objectMapper.writeValueAsString(response);
         } catch (Exception e) {
             log.error("Failed parsing of [{}] to string", wrappedNode, e);
